@@ -21,8 +21,6 @@ type VerifyHandler struct {
 	*configs.Config
 }
 
-var EmailVer string
-
 func NewVerifyHandler(router *http.ServeMux, deps VerifyHandlerDeps) {
 	handler := &VerifyHandler{
 		Config: deps.Config,
@@ -39,7 +37,6 @@ func (handler *VerifyHandler) Send() http.HandlerFunc {
 		fmt.Println(body.Email)
 		res.Json(w, "Ok", 200)
 		handler.sendEmail(body.Email)
-		EmailVer = body.Email
 	}
 }
 func (handler *VerifyHandler) VerifyEmail() http.HandlerFunc {
@@ -51,13 +48,10 @@ func (handler *VerifyHandler) VerifyEmail() http.HandlerFunc {
 			return
 		}
 		fmt.Println("user=", user)
-		if user.Email == EmailVer {
-			fmt.Println("Email is Ok")
-		}
 		if user.Hash == hs {
-			fmt.Println("Hash  is Ok")
+			res.Json(w, true, 200)
 		} else {
-			fmt.Println("Hash  is Not Ok")
+			res.Json(w, false, 200)
 		}
 		bdjson.RemoveJson()
 	}
