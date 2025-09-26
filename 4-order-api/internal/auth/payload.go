@@ -5,7 +5,7 @@ type PhoneRequest struct {
 }
 
 type PhoneResponse struct {
-	SessionId string `json:"session-id"`
+	SessionId string `json:"sessionId"`
 }
 
 type CodeRequest struct {
