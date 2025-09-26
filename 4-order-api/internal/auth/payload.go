@@ -9,7 +9,7 @@ type PhoneResponse struct {
 }
 
 type CodeRequest struct {
-	SessionId string `json:"sessionid" validate:"required"`
+	SessionId string `json:"sessionId" validate:"required"`
 	Code      uint   `json:"code" validate:"required"`
 }
 type CodeResponse struct {
