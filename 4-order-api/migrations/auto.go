@@ -1,11 +1,14 @@
 package main
 
 import (
-	"4-order-api/product"
+	"4-order-api/internal/product"
+	"4-order-api/internal/user"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
+	//"os"
+	//"os/user"
 )
 
 func main() {
@@ -19,6 +22,10 @@ func main() {
 		panic(err)
 	}
 	err = db.AutoMigrate(&product.Product{})
+	if err != nil {
+		panic(err)
+	}
+	err = db.AutoMigrate(&user.Phone{})
 	if err != nil {
 		panic(err)
 	}

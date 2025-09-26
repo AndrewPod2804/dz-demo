@@ -1,0 +1,17 @@
+package auth
+
+type PhoneRequest struct {
+	Phone string `json:"phone" validate:"required,e164"`
+}
+
+type PhoneResponse struct {
+	SessionId string `json:"session-id"`
+}
+
+type CodeRequest struct {
+	SessionId string `json:"session-id" validate:"required"`
+	Code      uint   `json:"code" validate:"required"`
+}
+type CodeResponse struct {
+	Token string `json:"token"`
+}

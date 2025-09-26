@@ -2,9 +2,11 @@ package main
 
 import (
 	"4-order-api/configs"
+	"4-order-api/internal/auth"
+	product2 "4-order-api/internal/product"
+	"4-order-api/internal/user"
 	"4-order-api/middleware"
 	"4-order-api/pkg/db"
-	"4-order-api/product"
 	"fmt"
 	"net/http"
 )
@@ -17,9 +19,19 @@ func main() {
 	fmt.Println(conf)
 	db := db.NewDb(conf)
 	router := http.NewServeMux()
-	productRepository := product.NewProductRepository(db)
 
-	product.NewProductHandler(router, product.ProductHandlerDeps{
+	phone := user.NewPhoneRepository(db)
+
+	authService := auth.NewAuthService(phone)
+
+	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
+		Config:      conf,
+		AuthService: authService,
+	})
+
+	productRepository := product2.NewProductRepository(db)
+
+	product2.NewProductHandler(router, product2.ProductHandlerDeps{
 		ProductRepository: productRepository,
 	})
 	server := http.Server{

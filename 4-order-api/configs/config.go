@@ -7,16 +7,16 @@ import (
 )
 
 type Config struct {
-	Bb DbConfig
-	//Auth AuthConfig
+	Bb   DbConfig
+	Auth AuthConfig
 }
 type DbConfig struct {
 	Dsn string
 }
 
-//type AuthConfig struct {
-//	Secret string
-//}
+type AuthConfig struct {
+	Secret string
+}
 
 func LoadConfig() *Config {
 	err := godotenv.Load()
@@ -27,8 +27,8 @@ func LoadConfig() *Config {
 		Bb: DbConfig{
 			Dsn: os.Getenv("DSN"),
 		},
-		//Auth: AuthConfig{
-		//	Secret: os.Getenv("SECRET"),
-		//},
+		Auth: AuthConfig{
+			Secret: os.Getenv("SECRET"),
+		},
 	}
 }
