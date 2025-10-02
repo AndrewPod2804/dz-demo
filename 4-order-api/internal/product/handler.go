@@ -1,6 +1,8 @@
 package product
 
 import (
+	"4-order-api/configs"
+	"4-order-api/middleware"
 	"4-order-api/pkg/req"
 	"4-order-api/pkg/res"
 	"fmt"
@@ -11,6 +13,7 @@ import (
 
 type ProductHandlerDeps struct {
 	ProductRepository *ProductRepository
+	Config            *configs.Config
 }
 type ProductHandler struct {
 	ProductRepository *ProductRepository
@@ -21,7 +24,7 @@ func NewProductHandler(router *http.ServeMux, deps ProductHandlerDeps) {
 		ProductRepository: deps.ProductRepository,
 	}
 	router.HandleFunc("POST /product", handler.Create())
-	router.HandleFunc("PATCH  /product/{id}", handler.Update())
+	router.Handle("PATCH  /product/{id}", middleware.IsAuthed(handler.Update(), deps.Config))
 	router.HandleFunc("DELETE /product/{id}", handler.Delete())
 	router.HandleFunc("GET /{id}", handler.GetById())
 	router.HandleFunc("GET /products", handler.GetAll())
@@ -49,6 +52,10 @@ func (handler *ProductHandler) Create() http.HandlerFunc {
 func (handler *ProductHandler) Update() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Update")
+		if phone, ok := r.Context().Value(middleware.ContextPhonekey).(string); ok {
+			fmt.Println(phone)
+		}
+
 		body, err := req.HandleBody[ProductUpdateRequest](&w, r)
 		if err != nil {
 			return
